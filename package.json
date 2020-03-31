@@ -1,0 +1,33 @@
+{
+  "name": "the_tech_forums_app",
+  "version": "1.0.0",
+  "description": "Community Web Forums App",
+  "main": "nodemon --delay 3.0 --verbose dist/app.js",
+  "scripts": {
+    "start": "nodemon --delay 3.0 --verbose dist/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "template",
+    "express",
+    "typescript"
+  ],
+  "author": "Sachin Singh",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.3",
+    "@types/multer": "^1.4.2",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "pug": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/mysql": "^2.15.9",
+    "@types/node": "^12.12.31",
+    "@types/pug": "^2.0.4",
+    "typescript": "^3.8.3"
+  }
+}
