@@ -1,6 +1,6 @@
 {   
    "host":"localhost",
-   "username":"sachinsingh",
+   "user":"sachinsingh",
    "password":"root123",
    "database":"TheTechForums"
 }

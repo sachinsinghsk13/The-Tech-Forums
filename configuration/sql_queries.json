@@ -1,0 +1,10 @@
+{
+    "authenticate_user": "SELECT * FROM USERS WHERE username = ? AND password = SHA1(?)",
+    "insert_user":"INSERT INTO USERS (name, username, email, profession, birthdate, gender, password) VALUE (?,?,?,?,?,?,SHA1(?))",
+    "update_user":"UPDATE USERS SET name = ?, profession = ? WHERE user_id = ?",
+    "update_user_password":"UPDATE USERS SET password = SHA1(?) WHERE user_id = ?",
+
+
+
+    "":""
+}

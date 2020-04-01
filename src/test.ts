@@ -1,12 +1,27 @@
-import OTPGenerator from "./util/otp_generator";
+import mysql from 'mysql';
+import path from 'path';
+import UserDao from './dao/user_dao';
+import ConfigurationReader from './util/json_file_reader';
+import User from './model/user';
 
-console.log(OTPGenerator.generateOTP());
+const pool = mysql.createPool({
+    host:'localhost',
+    user:'sachinsingh',
+    password:'root123',
+    database:'TheTechForums'
+});
 
-
-
-
-
-
+const sqlQueries = ConfigurationReader.getSQLQueries(path.join(__dirname,'../configuration/sql_queries.json'));
+const dao = new UserDao(pool,sqlQueries);
+(async function() {
+    try {
+        let user = new User('vishal333','vishal333@gmail.com','Store Manager','Vishal Singhal',new Date(),'MALE','root');
+        let x = await dao.insertUser(user);
+        console.log(x);
+    } catch (error) {
+        console.log("My Error : "+error);
+    }
+})();
 
 
 

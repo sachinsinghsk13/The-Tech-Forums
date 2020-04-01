@@ -2,6 +2,7 @@ import Forum from "./forum";
 import Post from "./post";
 
 export default class Topic {
+    public totalPosts: number | undefined;
     constructor(
         public topicId: number,
         public forum: Forum,
