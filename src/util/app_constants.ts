@@ -7,4 +7,5 @@ export default class AppConstants {
     static FORUM_DAO: string= "FORUM_DAO"
     static TOPIC_DAO: string= "TOPIC_DAO"
     static POST_DAO: string= "POST_DAO"
+    static FORUM_SERVICE: string = "FORUM_SERVICE"
 }

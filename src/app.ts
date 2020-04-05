@@ -9,6 +9,11 @@ import ForumDao from './dao/forum_dao';
 import TopicDao from './dao/topic_dao';
 import PostDao from './dao/post_dao';
 import UserDao from './dao/user_dao';
+import ForumService from './services/forums_service';
+import ForumController from './controllers/forum_controller';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+
 const upload = multer();
 const app = express();
 
@@ -19,6 +24,9 @@ const app = express();
 app.set('view engine','pug');
 app.set('views',path.join(__dirname,'../views'));
 app.use(express.static(path.join(__dirname, '../public')));
+
+app.use(bodyParser.urlencoded({extended: true})); // 
+app.use(bodyParser.json());
 
 /*
  * Setup MySQL Connection Pool 
@@ -49,10 +57,19 @@ const postDao = new PostDao(connectionPool, sqlQueries);
 app.set(AppConstants.POST_DAO, postDao);
 
 /*
+ * Setup Services
+ */
+
+const forumService = new ForumService(forumDao);
+app.set(AppConstants.FORUM_SERVICE, forumService);
+
+
+/*
  * Setup Route Controllers
  */
 
 app.use(MainController);
+app.use(ForumController);
 
 app.listen(8000, ()=> {
     console.log("app is running")

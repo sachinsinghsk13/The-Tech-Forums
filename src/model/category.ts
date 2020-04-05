@@ -6,6 +6,6 @@ export default class Category {
         public categoryId: number,
         public name: string, 
         public description: string,
-        public forums: Forum[] | null
+        public forums?: Forum[]
         ) {}
 }
