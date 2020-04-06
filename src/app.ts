@@ -13,6 +13,8 @@ import ForumService from './services/forums_service';
 import ForumController from './controllers/forum_controller';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import TopicController from './controllers/topics_controller';
+import TopicService from './services/topics_service';
 
 const upload = multer();
 const app = express();
@@ -60,9 +62,11 @@ app.set(AppConstants.POST_DAO, postDao);
  * Setup Services
  */
 
-const forumService = new ForumService(forumDao);
+const forumService = new ForumService(forumDao, topicDao);
 app.set(AppConstants.FORUM_SERVICE, forumService);
 
+const topicService = new TopicService(topicDao);
+app.set(AppConstants.TOPIC_SERVICE, topicService);
 
 /*
  * Setup Route Controllers
@@ -70,7 +74,7 @@ app.set(AppConstants.FORUM_SERVICE, forumService);
 
 app.use(MainController);
 app.use(ForumController);
-
+app.use(TopicController);
 app.listen(8000, ()=> {
     console.log("app is running")
 });

@@ -14,8 +14,11 @@ ForumController.get('/forums',(req, res) => {
 ForumController.get('/forums/:forumTitle', (req, res) => {
     let forumTitle = req.params.forumTitle;
     let forumId = req.query.forumId;
-    console.log(forumTitle, forumId);
-    res.end("working");
+    let forumService = <ForumService> req.app.get(AppConstants.FORUM_SERVICE);
+    (async function() {
+        let forum = await forumService.getForum(forumId);
+        res.render('topics',{title: forumTitle, forum: forum});
+    })();
 });
 
 export default ForumController;

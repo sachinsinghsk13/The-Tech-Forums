@@ -7,7 +7,7 @@ html
         .container.shadow-sm
             for category in categories
                 .row.my-4
-                    .col-12.border-top.py-3
+                    .col-12.border-top.py-3.rows-head
                         .row
                             .col-1
                                 i.fas.fa-star
@@ -24,13 +24,14 @@ html
                             .col-2 Topics
                             .col-3 Posts
                         for forum in category.forums
-                            .row.shadow-sm.my-3.py-3
+                            .row.shadow-sm.my-3.py-3.forum-row
                                 .col-1
-                                    i.fas.fa-folder.text-dark
+                                    i.fas.fa-folder.fa-2x.text-info
                                 .col-6
                                     .row
                                         .col-12
-                                            a(href=`/forums/${forum.title}?forumId=${forum.forumId}`).h6= forum.title
+                                            a(href=`/forums/${forum.title}?forumId=${forum.forumId}`).h6
+                                                strong= forum.title
                                         .col-12.pt-2
                                             if forum.description.length > 50
                                                 p.text-muted= forum.description.substr(0,50) + '...'

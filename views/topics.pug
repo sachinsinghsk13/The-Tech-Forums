@@ -3,3 +3,73 @@ html
     include includes/head
     body
         include components/navbar
+        .container.shadow-sm
+            .row.my-4
+                .col-12.border-top.py-3.rows-head
+                    .row
+                        .col-1
+                            i.fas.fa-star
+                        .col-11
+                            p.d-block.px-2.h5
+                                strong.text-dark= forum.title
+                        .col-3.offset-1.col-md-8
+                            p.text-success.px-2.h6 Forum
+                        .col-8.col-md-3
+                            p.text-secondary.px-2 Created: #{forum.prettyDate}
+                        .col-11.offset-1.col-md-7
+                            p.text-muted.d-block.px-2= forum.description
+                        .col-11.offset-1.col-md-3.offset-md-1
+                            a.btn.btn-primary.btn-sm.px-3(href="") New Topic
+                .col-12
+                    if (forum.subforums.length > 0)
+                        .row.text-dark.h6.py-2.border
+                            .col-1
+                                i.fas.fa-folder
+                            .col-5 Sub Forums
+                            .col-3.text-center
+                                i.fas.fa-envelope-open-text
+                                | Topics
+                            .col-3.text-center
+                                i.fas.fa-comment
+                                | Posts
+                        for subforum in forum.subforums
+                            .row.shadow-sm.my-3.py-3.forum-row
+                                .col-1
+                                    i.fas.fa-folder.text-info.fa-2x
+                                .col-5
+                                    .row
+                                        .col-12
+                                            a.h6.text-decoration-none(href=`/forums/${subforum.title}?forumId=${subforum.forumId}`)
+                                                strong= subforum.title
+                                        .col-12.pt-2
+                                            p.text-muted= subforum.description
+                                .col-3.h6.text-center
+                                    strong= subforum.totalTopics
+                                .col-3.h6.text-center
+                                    strong= subforum.totalPosts
+                    if (forum.topics.length > 0)
+                        .row.text-dark.h6.py-2.border
+                            .col-1
+                                i.fas.fa-envelope-open-text
+                            .col-7 Topics
+                            .col-4.text-center
+                                i.fas.fa-comment
+                                | Replies
+                        for topic in forum.topics
+                            .row.shadow-sm.my-3.py-3.bg-light.topic-row
+                                .col-1
+                                    i.fas.fa-envelope-open-text.text-success.fa-2x
+                                .col-7
+                                    .row
+                                        .col-12
+                                            a.h6.text-decoration-none(href=`/topics/${encodeURIComponent(topic.title)}help?topicId=${topic.topicId}`)
+                                                strong= topic.title
+                                        .col-12.d-none.d-md-block
+                                            p.text-muted= topic.description
+                                        .col-12.col-md-6
+                                            p.text-muted By: #[a.text-decoration-none.btn-link(href="#") @#{topic.createdBy.username}]
+                                        .col-12.col-md-4.offset-md-2
+                                            p.text-muted= topic.prettyDate
+                                .col-4.h6.text-center= topic.totalPosts
+                        
+        include components/footer

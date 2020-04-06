@@ -6,6 +6,9 @@ import User from './model/user';
 import Category from './model/category';
 import ForumDao from './dao/forum_dao';
 import Forum from './model/forum';
+import ForumService from './services/forums_service';
+import TopicDao from './dao/topic_dao';
+import TopicService from './services/topics_service';
 
 const pool = mysql.createPool({
     host:'localhost',
@@ -16,18 +19,16 @@ const pool = mysql.createPool({
 
 const sqlQueries = ConfigurationReader.getSQLQueries(path.join(__dirname,'../configuration/sql_queries.json'));
 const dao = new ForumDao(pool,sqlQueries);
-// (async function() {
-//     try {
-//        let cate =  await dao.getAllForumsInCategories();
-//         cate.forEach(cat => {
-//             cat.forums?.forEach((f) => {
-//                 console.log(f);
-//             });
-//         });
-//     } catch (error) {
-//         console.log("My Error : "+error);
-//     }
-// })();
+const service = new TopicService(new TopicDao(pool, sqlQueries));
+(async function() {
+    try {
+       let forum = await service.getTopic(11);
+       console.log("outer"+forum);
+      // console.log(forum);
+    } catch (error) {
+        console.log("My Error : "+error);
+    }
+})();
 // ul
 // for category in categories
 //     li= category.categoryId

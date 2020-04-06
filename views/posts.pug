@@ -1,0 +1,43 @@
+doctype html
+html
+    include includes/head
+    body
+        include components/navbar
+        .container.shadow-sm
+            .row.my-4
+                .col-12.border-top.py-3
+                    .row
+                        .col-12.h5.text-light.text-center.bg-info.py-1 REPLIES
+                        .col-1
+                            i.fas.fa-star
+                        .col-11
+                            p.text.dark.px-2.h4= topic.title
+                        .col-11.offset-1= topic.description
+                            hr
+                        .col-11.offset-1.py-1.col-md-6 Forum: #[a.btn-link(href="#")= topic.forum.title]
+                        .col-11.offset-1.py-1.col-md-4 Author: #[a.btn-link(href="#") @#{topic.createdBy.username}]
+                        .col-11.offset-1.text-muted= topic.prettyDate
+                .col-12
+                    .row.bg-light.text-dark.h6.py-2.border
+                    for post in topic.posts
+                        .row.my-2.shadow-sm
+                            .col-2.col-sm-1
+                                img.img-fluid.rounded-circle(src="/images/img.png")
+                            .col-10
+                                .row
+                                    .col-12 #{post.postedBy.name} #[a.btn-link.mx-2(href="#") @#{post.postedBy.username}]
+                                    .col-12.text-muted.py-1= post.prettyDate
+                                hr
+                                .row
+                                    .col-12
+                                        p.text-dark= post.content 
+                            .col-12.bg-light.py-2.border       
+                    .row.my-2
+                        .col-11.offset-1
+                            p.lead.text-capitalize Reply to this topic
+                        .col-11.offset-1
+                            form(action="", method="post")
+                                .form-group
+                                    textarea.form-control(name="",cols="30",rows="3",placeholder="Write Something...")
+                                .form-group
+                                    input.btn.btn-success.float-right.px-4(type="submit", value="Reply")                       

@@ -6,7 +6,7 @@ export default class User {
         public name: string,
         public birthDate: Date,
         public gender: string,
-        public password?: string,
         public userId?: number,
+        public password?: string,
     ){}
 }

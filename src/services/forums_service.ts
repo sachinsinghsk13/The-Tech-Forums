@@ -1,9 +1,12 @@
 import ForumDao from "../dao/forum_dao";
 import Category from "../model/category";
 import Forum from "../model/forum";
+import TopicDao from "../dao/topic_dao";
+import Topic from "../model/topic";
+import User from "../model/user";
 
 export default class ForumService {
-    constructor(private forumDao: ForumDao) {
+    constructor(private forumDao: ForumDao, private topicDao: TopicDao) {
 
     }
 
@@ -25,10 +28,10 @@ export default class ForumService {
                     let topicMap = new Map<number, number>();
 
                     for (let i = 0; i < postResult.length; i++) {
-                        postMap.set(postResult[i]['FORUM_ID'],postResult[i]['POSTS']);
+                        postMap.set(postResult[i]['FORUM_ID'], postResult[i]['POSTS']);
                     }
                     for (let i = 0; i < topicResult.length; i++) {
-                        topicMap.set(topicResult[i]['FORUM_ID'],topicResult[i]['TOPICS']);
+                        topicMap.set(topicResult[i]['FORUM_ID'], topicResult[i]['TOPICS']);
                     }
 
                     let categories = new Map<number, Category>();
@@ -59,5 +62,69 @@ export default class ForumService {
                 }
             })(); // End of async funtion
         })
+    }
+
+    getForum(id: number): Promise<Forum> {
+        return new Promise((resolve, reject) => {
+            (async () => {
+
+                try {
+                    let forumRow = await this.forumDao.getForum(id);
+                    // get the forum 
+                    let forum = new Forum(forumRow[0]['TITLE'], forumRow[0]['DESCRIPTION'], new Date(forumRow[0]['DATE_CREATED']), id);
+
+
+                    console.log('helo1');
+                    let subformResult = await this.forumDao.getSubForumsInForum(id);
+                    console.log('helo2');
+                    let subforumPostCountResult = await this.forumDao.getPostCountInSubforumsInForum(id);
+                    console.log('helo3');
+                    let subforumTopicCountResult = await this.forumDao.getTopicCountInSubforumsInForum(id);
+
+                    let subforumPostCountMap = new Map<number, number>();
+                    for (let i = 0; i < subforumPostCountResult.length; i++)
+                        subforumPostCountMap.set(subforumPostCountResult[i]['FORUM_ID'], subforumPostCountResult[i]['POSTS']);
+
+                    let subforumTopicCountMap = new Map<number, number>();
+                    for (let i = 0; i < subforumTopicCountResult.length; i++)
+                        subforumTopicCountMap.set(subforumTopicCountResult[i]['FORUM_ID'], subforumTopicCountResult[i]['TOPICS']);
+
+                    forum.subforums = []; // initialize space for subforums
+
+                    for (let i = 0; i < subformResult.length; i++) {
+                        let subforum = new Forum(subformResult[i]['TITLE'], subformResult[i]['DESCRIPTION'], new Date(subformResult[i]['DATE_CREATED']), subformResult[i]['FORUM_ID']);
+                        if (subforum.forumId && subforumTopicCountMap.has(subforum.forumId)) {
+                            subforum.totalTopics = subforumTopicCountMap.get(subforum.forumId);
+                            if (subforumPostCountMap.has(subforum.forumId) && subforum.totalTopics != 0)
+                                subforum.totalPosts = subforumPostCountMap.get(subforum.forumId);
+                        }
+                        forum.subforums.push(subforum);
+                    }
+
+                    let postCountResult = await this.topicDao.getPostsCountInTopics(id);
+                    let postCountMap = new Map<number, number>();
+                    for (let i = 0; i < postCountResult.length; i++)
+                        postCountMap.set(postCountResult[i]['TOPIC_ID'],postCountResult[i]['POSTS']);
+
+                    let topicsResult = await this.topicDao.getTopicsInForum(id);
+                    forum.topics = [];
+                    for (let i = 0; i < topicsResult.length; i++) {
+                        let user = new User(topicsResult[i]['USERNAME'],topicsResult[i]['EMAIL'], topicsResult[i]['PROFESSION'], topicsResult[i]['NAME'], new Date(topicsResult[i]['BIRTHDATE']), topicsResult[i]['GENDER'], topicsResult[i]['USER_ID']);
+                        console.log(topicsResult[i]);
+                        let topic = new Topic(topicsResult[i]['TOPIC_ID'], topicsResult[i]['TITLE'], topicsResult[i]['DESCRIPTION'], user, topicsResult[i]['CREATED_DATE']);
+                        if (topic.topicId && postCountMap.has(topic.topicId)) {
+                            topic.totalPosts = postCountMap.get(topic.topicId);
+                        }
+                        forum.topics.push(topic);
+                    }
+                    if (!forum) {
+                        reject(forum);
+                    }
+                    resolve(forum);
+                } catch (error) {
+                    reject(error);
+                }
+            })()
+        });
     }
 }
