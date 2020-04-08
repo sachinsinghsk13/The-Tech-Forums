@@ -30,7 +30,7 @@ html
                                 .col-6
                                     .row
                                         .col-12
-                                            a(href=`/forums/${forum.title}?forumId=${forum.forumId}`).h6
+                                            a(href=`/forums/${encodeURIComponent(forum.title.replace(/\s/g,'-'))}?forumId=${forum.forumId}`).h6.text-decoration-none
                                                 strong= forum.title
                                         .col-12.pt-2
                                             if forum.description.length > 50

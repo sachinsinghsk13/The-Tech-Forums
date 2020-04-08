@@ -62,7 +62,7 @@ html
                                 .col-7
                                     .row
                                         .col-12
-                                            a.h6.text-decoration-none(href=`/topics/${encodeURIComponent(topic.title)}help?topicId=${topic.topicId}`)
+                                            a.h6.text-decoration-none(href=`/topics/${encodeURIComponent(topic.title.replace(/\s/g,'-'))}?topicId=${topic.topicId}`)
                                                 strong= topic.title
                                         .col-12.d-none.d-md-block
                                             p.text-muted= topic.description

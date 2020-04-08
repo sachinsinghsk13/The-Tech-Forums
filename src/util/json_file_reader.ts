@@ -9,7 +9,7 @@ export default class ConfigurationReader {
         return JSON.parse(json);
     }
 
-    static getSQLQueries(location: string): any {
+    static getConfiguration(location: string): any {
         let json = fs.readFileSync(location).toString();
         return JSON.parse(json);
     }

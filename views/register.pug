@@ -1,0 +1,32 @@
+doctype html
+html
+    include includes/head
+    body
+        include components/navbar
+        .container
+            .row.justify-content-center.p-2
+                .col-12.col-md-6.p-2
+                    h4.text-center.my-2 Join Tech Forums Now
+                    hr
+                    form(action="/register", method="POST")
+                        .form-row
+                            .col-12
+                                .form-group
+                                    input.form-control(type="text", placeholder="Full Name")
+                            .col-12
+                                .form-group
+                                    input.form-control(type="text", placeholder="Username")
+                            .col-12
+                                .form-group
+                                    input.form-control(type="email", placeholder="Email")
+                            .col-10
+                                .form-group
+                                    input.form-control(type="password", placeholder="Password")
+                            .col-2
+                                .form-group
+                                    button.btn.btn-info.btn-block Show
+                            .col-12
+                                .form-group
+                                    input.btn.btn-primary(type="submit", value="Submit")
+                            
+        include components/footer

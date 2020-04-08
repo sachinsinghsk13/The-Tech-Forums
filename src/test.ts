@@ -17,13 +17,12 @@ const pool = mysql.createPool({
     database:'TheTechForums'
 });
 
-const sqlQueries = ConfigurationReader.getSQLQueries(path.join(__dirname,'../configuration/sql_queries.json'));
+const sqlQueries = ConfigurationReader.getConfiguration(path.join(__dirname,'../configuration/sql_queries.json'));
 const dao = new ForumDao(pool,sqlQueries);
 const service = new TopicService(new TopicDao(pool, sqlQueries));
 (async function() {
     try {
        let forum = await service.getTopic(11);
-       console.log("outer"+forum);
       // console.log(forum);
     } catch (error) {
         console.log("My Error : "+error);

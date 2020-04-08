@@ -9,12 +9,8 @@ TopicController.get('/topics/:topic',(req, res) => {
     let topicService = <TopicService> req.app.get(AppConstants.TOPIC_SERVICE);
    
     (async () => {
-        console.log(encodeURIComponent(req.params.topic));
-
-        console.log(topicId);
         let topic = await topicService.getTopic(topicId);
         res.render('posts',{topic: topic, title: topic.title});
-     //   res.end("under construction")
     })();
 });
 

@@ -72,13 +72,8 @@ export default class ForumService {
                     let forumRow = await this.forumDao.getForum(id);
                     // get the forum 
                     let forum = new Forum(forumRow[0]['TITLE'], forumRow[0]['DESCRIPTION'], new Date(forumRow[0]['DATE_CREATED']), id);
-
-
-                    console.log('helo1');
                     let subformResult = await this.forumDao.getSubForumsInForum(id);
-                    console.log('helo2');
                     let subforumPostCountResult = await this.forumDao.getPostCountInSubforumsInForum(id);
-                    console.log('helo3');
                     let subforumTopicCountResult = await this.forumDao.getTopicCountInSubforumsInForum(id);
 
                     let subforumPostCountMap = new Map<number, number>();
@@ -110,7 +105,6 @@ export default class ForumService {
                     forum.topics = [];
                     for (let i = 0; i < topicsResult.length; i++) {
                         let user = new User(topicsResult[i]['USERNAME'],topicsResult[i]['EMAIL'], topicsResult[i]['PROFESSION'], topicsResult[i]['NAME'], new Date(topicsResult[i]['BIRTHDATE']), topicsResult[i]['GENDER'], topicsResult[i]['USER_ID']);
-                        console.log(topicsResult[i]);
                         let topic = new Topic(topicsResult[i]['TOPIC_ID'], topicsResult[i]['TITLE'], topicsResult[i]['DESCRIPTION'], user, topicsResult[i]['CREATED_DATE']);
                         if (topic.topicId && postCountMap.has(topic.topicId)) {
                             topic.totalPosts = postCountMap.get(topic.topicId);

@@ -15,7 +15,9 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import TopicController from './controllers/topics_controller';
 import TopicService from './services/topics_service';
-
+import nodemailer from 'nodemailer';
+import EmailClient from './util/email_client';
+import AccountsController from './controllers/account_controller';
 const upload = multer();
 const app = express();
 
@@ -31,6 +33,14 @@ app.use(bodyParser.urlencoded({extended: true})); //
 app.use(bodyParser.json());
 
 /*
+ *  Setup Email Client 
+ */
+const emailConfig = ConfigurationReader.getConfiguration(path.join(__dirname, '../configuration/email.json'));
+const transporter = nodemailer.createTransport(emailConfig);
+const emailClient = new EmailClient(transporter);
+app.set(AppConstants.EMAIL_CLIENT, emailClient);
+
+/*
  * Setup MySQL Connection Pool 
  */
 const config = ConfigurationReader.getMySQLPoolConfig(path.join(__dirname,'../configuration/database.json'));
@@ -42,7 +52,7 @@ app.set(AppConstants.MYSQL_CONNECTION_POOL,connectionPool);
  */
 
 // -- SQL Quries
-const sqlQueries = ConfigurationReader.getSQLQueries(path.join(__dirname,'../configuration/sql_queries.json'));
+const sqlQueries = ConfigurationReader.getConfiguration(path.join(__dirname,'../configuration/sql_queries.json'));
 
 // -- User Dao
 const userDao = new UserDao(connectionPool,sqlQueries);
@@ -75,6 +85,7 @@ app.set(AppConstants.TOPIC_SERVICE, topicService);
 app.use(MainController);
 app.use(ForumController);
 app.use(TopicController);
+app.use(AccountsController);
 app.listen(8000, ()=> {
     console.log("app is running")
 });
