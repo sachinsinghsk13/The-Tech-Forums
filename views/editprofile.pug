@@ -3,6 +3,59 @@ html
     include includes/head
     body
         include components/navbar
-
+        .container
+            .row
+                .col-12
+                    h4.py-4.text-center Make Changes To Your Profile
+                    form(action=`/profiles/${user.username}`,method="POST")
+                        .form-row
+                            .col-12.col-md-6
+                                .form-group
+                                    label Full Name:    
+                                    input.form-control(type="text", placeholder="Full Name", name="name", value=`${user.name}`)
+                            .col-12.col-md-6
+                                .form-group
+                                    label Username:    
+                                    input.form-control(type="text", placeholder="Username", name="username", value=`${user.username}` disabled)
+                                    small.text-muted.form-text You Can't Change Your Username
+                            .col-12.col-md-6
+                                .form-group
+                                    label Email:    
+                                    input.form-control(type="text", placeholder="Email", name="email", value=`${user.email}` disabled)
+                                    small.text-muted.form.text You Can't Change Email
+                            .col-12.col-md-6
+                                .form-group
+                                    label Profession:    
+                                    input.form-control(type="text", placeholder="Profession", name="profession", value=`${(user.profession)?user.profession:''}`)
+                            .col-12.col-md-6
+                                .form-group
+                                    label Birthday:    
+                                    input.form-control(type="date", name="birthday", value=`${(user.html5date)?user.html5date:''}`)
+                            .col-12.col-md-6
+                                .form-group
+                                    label City:    
+                                    input.form-control(type="text", placeholder="City", name="city", value=`${(user.city)?user.city:''}`)
+                            .col-12.col-md-6
+                                .form-group
+                                    label State:    
+                                    input.form-control(type="text", placeholder="State", name="state", value=`${(user.state)?user.state:''}`)
+                        .form-row
+                            .col-12
+                                .form-group
+                                    label Bio:
+                                    textarea.form-control(name="bio", cols="30", rows="4", placeholder="About You") #{user.bio}
+                        
+                        .form-row
+                            .col-12.my-2
+                                .text-dark Choose An Avtar
+                            .col-12
+                                input(type="hidden", name="avtar", id="avtarInput", value=`${user.avtar.id}`)
+                            for avtar in avtars
+                                .col-3.col-md-2.col-lg-1.avtar
+                                    img.shadow-sm.p-2(src=`/images/avtars/${avtar.filename}`,data-avtar-id=`${avtar.id}`)
+                        .form-row
+                            .col-12
+                                .form-group.py-3
+                                    input.btn.btn-primary.btn-block.px-4(type="submit", value="Submit")
         
         include components/footer

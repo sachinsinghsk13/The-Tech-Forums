@@ -12,16 +12,21 @@ html
                         .form-row
                             .col-12
                                 .form-group
-                                    input.form-control(type="text", placeholder="Full Name")
+                                    input.form-control(type="text", placeholder="Full Name", name="name")
                             .col-12
                                 .form-group
-                                    input.form-control(type="text", placeholder="Username")
+                                    input.form-control(type="text", placeholder="Username", name="username")
                             .col-12
                                 .form-group
-                                    input.form-control(type="email", placeholder="Email")
+                                    input.form-control(type="email", placeholder="Email", name="email")
+                            .col-12
+                                .form-group
+                                    select.custom-select(name="gender")
+                                        option(value="Male") Male
+                                        option(value="Female") Female
                             .col-10
                                 .form-group
-                                    input.form-control(type="password", placeholder="Password")
+                                    input.form-control(type="password", placeholder="Password", name="password")
                             .col-2
                                 .form-group
                                     button.btn.btn-info.btn-block Show

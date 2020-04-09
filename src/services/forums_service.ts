@@ -104,7 +104,7 @@ export default class ForumService {
                     let topicsResult = await this.topicDao.getTopicsInForum(id);
                     forum.topics = [];
                     for (let i = 0; i < topicsResult.length; i++) {
-                        let user = new User(topicsResult[i]['USERNAME'],topicsResult[i]['EMAIL'], topicsResult[i]['PROFESSION'], topicsResult[i]['NAME'], new Date(topicsResult[i]['BIRTHDATE']), topicsResult[i]['GENDER'], topicsResult[i]['USER_ID']);
+                        let user = new User(topicsResult[i]['USERNAME'],topicsResult[i]['EMAIL'], topicsResult[i]['PROFESSION'], topicsResult[i]['NAME'], topicsResult[i]['GENDER'],new Date(topicsResult[i]['BIRTHDAY']), topicsResult[i]['USER_ID']);
                         let topic = new Topic(topicsResult[i]['TOPIC_ID'], topicsResult[i]['TITLE'], topicsResult[i]['DESCRIPTION'], user, topicsResult[i]['CREATED_DATE']);
                         if (topic.topicId && postCountMap.has(topic.topicId)) {
                             topic.totalPosts = postCountMap.get(topic.topicId);

@@ -18,6 +18,7 @@ import TopicService from './services/topics_service';
 import nodemailer from 'nodemailer';
 import EmailClient from './util/email_client';
 import AccountsController from './controllers/account_controller';
+import session from 'express-session';
 const upload = multer();
 const app = express();
 
@@ -28,7 +29,7 @@ const app = express();
 app.set('view engine','pug');
 app.set('views',path.join(__dirname,'../views'));
 app.use(express.static(path.join(__dirname, '../public')));
-
+app.use(session({secret:'this is the session'}));
 app.use(bodyParser.urlencoded({extended: true})); // 
 app.use(bodyParser.json());
 

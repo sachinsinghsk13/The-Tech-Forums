@@ -1,0 +1,55 @@
+.search-box {
+    border-radius: 1em;
+}
+.avtar img {
+    cursor: pointer;
+    width: 80px;
+    height: 80px;
+}
+.avtar img.selected {
+    background-color: rgb(248, 64, 224);
+    transform: scale(1.08);
+    border-radius: 50%;
+    
+}
+
+.avtar img:hover {
+    transform: scale(1.05);
+}
+/************************/
+div.tabbed-pane {
+    width: 100%;
+    position: relative;
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+}
+
+div.tab-list {
+    position: relative;
+    width: 100%;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); */
+}
+
+p.tab {
+    display: inline;
+    padding: 5px 10px;
+    cursor: pointer;
+    /* border-radius: 1.5em; */
+}
+p.tab:hover {
+    /* background-color: #ccc; */
+}
+p.tab.active {
+    /* background-color:  crimson; */
+    border-bottom: 3px solid crimson;
+    color: black;
+}
+div.tabbed-pane div.tab-content.visible {
+    display: block;
+}
+div.tabbed-pane div.tab-content {
+    display: none;
+    padding: 10px 15px;
+    font-size: 1.1em;
+}

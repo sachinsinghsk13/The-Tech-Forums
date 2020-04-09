@@ -12,3 +12,7 @@ export function formatDate(date: Date) : string {
     }
     return `${hour}:${date.getMinutes()} ${median} ${month[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
+
+export function formatDateTime(date: Date) : string {
+    return `${date.getDate()} ${month[date.getMonth()]}, ${date.getFullYear()}`;
+}
