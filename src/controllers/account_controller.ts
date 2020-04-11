@@ -5,24 +5,52 @@ import AppConstants from '../util/app_constants';
 import EmailClient from '../util/email_client';
 import UserDao from '../dao/user_dao';
 import User from '../model/user';
+import UserSession from '../util/user-session';
 const AccountsController = express.Router();
 
 AccountsController.get('/login', (req, res) => {
     res.render('login', { title: 'Login to Your Account' });
 });
 
+AccountsController.post('/login', (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    let userDao = <UserDao>req.app.get(AppConstants.USER_DAO);
+    (async ()=> {
+        try {
+            let user = await userDao.authenticate(username, password);
+            let userSession = new UserSession();
+            userSession.login(user);
+            if (req.session) {
+                req.session.userSession = userSession;
+            }
+            res.redirect('/'); // redirect to homepage
+        } catch (error) {
+            console.error(error);
+            res.redirect('/login');
+        }
+    })();
+})
+AccountsController.get('/logout', (req, res) => {
+    if (req.session && req.session.userSession) {
+        req.session.userSession.user = undefined;
+        req.session.userSession.authenticated = false;
+    }
+    res.redirect('/');
+});
 AccountsController.get('/register', (req, res) => {
     res.render('register', { title: 'Create Account' });
 });
 
 AccountsController.post('/register', (req, res) => {
-    let otp = '3233';
+    let otp = OTPGenerator.generateOTP();
     let applicant = new NewUserApplicant(req.body.name, req.body.username, req.body.email, req.body.gender, req.body.password, otp);
     if (req.session) {
         req.session.applicant = applicant;
     }
-    let emailClient = <EmailClient>req.app.get(AppConstants.EMAIL_CLIENT);
-    // emailClient.sendOTP(applicant.email, applicant.otp);
+
+    let emailClient = <EmailClient> req.app.get(AppConstants.EMAIL_CLIENT);
+    emailClient.sendOTP(applicant.email, applicant.otp);
     res.render('verification', { title: 'OTP Verification' });
 });
 
@@ -80,8 +108,12 @@ AccountsController.post('/profiles/:username', (req, res) => {
                 user.avtar.id = req.body.avtar;
             }
             let result = await userdao.updateProfile(user);
-            if (result)
+            if (result) {
+                if (req.session && req.session.userSession.authenticated) {
+                    req.session.userSession.user = user;
+                }
                 res.redirect(`/profiles/${username}`);
+            }
         } catch (error) {
             console.log(error);
         }

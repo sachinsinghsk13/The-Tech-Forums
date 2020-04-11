@@ -13,9 +13,10 @@ html
                     .row
                         .col-9.col-md-10
                             p.h5= user.name
-                        .col-3.col-md-2
-                            a.btn.btn-sm.border.btn-light.text-dark.text-decoration-none(href=`/profiles/${user.username}?action=make_changes`)
-                                i.fas.fa-cog.text-dark
+                        if (session.userSession && session.userSession.authenticated && session.userSession.user.username == user.username)
+                            .col-3.col-md-2
+                                a.btn.btn-sm.border.btn-light.text-dark.text-decoration-none(href=`/profiles/${user.username}?action=make_changes`)
+                                    i.fas.fa-cog.text-dark
                         .col-12
                             p.h6.text-info @#{user.username}
                         .col-12.col-md-6

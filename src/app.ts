@@ -19,6 +19,7 @@ import nodemailer from 'nodemailer';
 import EmailClient from './util/email_client';
 import AccountsController from './controllers/account_controller';
 import session from 'express-session';
+import { sessionProviderForViews } from './controllers/middlewares/authentication-helpers';
 const upload = multer();
 const app = express();
 
@@ -30,6 +31,7 @@ app.set('view engine','pug');
 app.set('views',path.join(__dirname,'../views'));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(session({secret:'this is the session'}));
+app.use(sessionProviderForViews);
 app.use(bodyParser.urlencoded({extended: true})); // 
 app.use(bodyParser.json());
 
@@ -64,7 +66,7 @@ const forumDao = new ForumDao(connectionPool, sqlQueries);
 app.set(AppConstants.FORUM_DAO, forumDao);
 
 const topicDao = new TopicDao(connectionPool, sqlQueries);
-app.set(AppConstants.TOPIC_DAO, sqlQueries);
+app.set(AppConstants.TOPIC_DAO, topicDao);
 
 const postDao = new PostDao(connectionPool, sqlQueries);
 app.set(AppConstants.POST_DAO, postDao);

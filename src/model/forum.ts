@@ -10,15 +10,21 @@ export default class Forum {
     public category: Category | undefined;
     public subforums: Forum[] | undefined;
     public topics: Topic[] | undefined;
-    public prettyDate: string;
-    constructor(
-        public title: string,
-        public description: string | null,
-        public createdDate: Date,
-        public forumId?: number
-    ) {
-        this.prettyDate = `${month[createdDate.getMonth()]} ${createdDate.getDate()}, ${createdDate.getFullYear()}`;
+    public prettyDate: string | undefined;
+
+    public title: string | undefined;
+    public description: string | undefined;
+    public createdDate: Date | undefined;
+    public forumId: number | undefined;
+    constructor() {
+        
         this.totalPosts = 0;
         this.totalTopics = 0;
+    }
+    setCreatedDate(date: Date) {
+        this.createdDate = date;
+        if (this.createdDate) {
+            this.prettyDate = `${month[this.createdDate.getMonth()]} ${this.createdDate.getDate()}, ${this.createdDate.getFullYear()}`;
+        }
     }
 }

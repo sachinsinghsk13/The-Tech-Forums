@@ -9,7 +9,7 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
             li.nav-item.active
                 a.nav-link(href="/")
                     i.fas.fa-home 
-                    |  Home
+                    |  
             li.nav-item
                 a.nav-link(href="#")
                     i.fas.fa-list 
@@ -18,7 +18,26 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
                 a.nav-link(href="#")
                     i.fas.fa-comment 
                     |  Disussions
-        form.form-inline.my-2.my-lg-0(action="#")
-            input.form-control.shadow-sm.px-2.mr-sm-2.search-box(type="search", placeholder="Search Topics, Posts..")
-            a.btn.btn-primary.m-2.px-3(href="/login") Login
-            a.btn.btn-outline-success.m-2.px-3(href="/register") Join Now
+        if (session.userSession && session.userSession.authenticated)
+            ul.ml-auto.nav
+                li.nav-item.mx-2
+                    form.form-inline.h-100(action="")
+                        input.form-control(type="search", placeholder="Search", name="search")
+                li.nav-item.mx-2
+                    .dropdown.h-100
+                        button.btn.btn-light.h-100.dropdown-toggle#usermenu(type="button", data-toggle="dropdown", area-haspopup="true", aria-expanded="false")= session.userSession.user.name
+                        .dropdown-menu.dropdown-menu-right(aria-labelledby="usermenu")
+                            a.dropdown-item(href=`/profiles/${session.userSession.user.username}`) My Profile
+                            .dropdown-divider
+                            a.dropdown-item(href="/logout") Logout
+                li.nav-item
+                    img.rounded-circle(width="50px", src=`/images/avtars/${session.userSession.user.avtar.filename}`)
+        else
+            ul.ml-auto.nav
+                li.nav-item.mx-2
+                    form.form-inline.h-100(action="")
+                        input.form-control(placeholder="Search..", type="search")
+                li.nav-item.mx-2
+                    a.btn.btn-primary(href="/login") Login
+                li.nav-item.mx-2
+                    a.btn.btn-outline-success(href="/register") Join Now

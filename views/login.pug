@@ -7,11 +7,11 @@ html
             .row.bg-light.justify-content-center
                 .col-12.col-md-6.order-1.order-md-last.p-4
                     h5.text-center Sign In
-                    form(action="#", method="POST")
+                    form(action="/login", method="POST")
                         .form-group
-                            input.form-control(type="text", placeholder="Username")
+                            input.form-control(type="text", placeholder="Username", name="username")
                         .form-group
-                            input.form-control(type="password", placeholder="Password")
+                            input.form-control(type="password", placeholder="Password", name="password")
                         .form-group
                             input.btn.btn-primary.px-5(type="submit", value="Login")
                         .form-group

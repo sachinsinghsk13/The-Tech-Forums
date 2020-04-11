@@ -39,13 +39,22 @@ export default class ForumService {
                         let row = forumResult[i];
                         let categoryId = row['CATEGORY_ID'];
                         if (!categories.has(categoryId)) {
-                            let c = new Category(categoryId, row['CATEGORY_NAME'], row['CATEGORY_DESCRIPTION']);
+                            let c = new Category();
+                            c.categoryId = categoryId;
+                            c.name = row['CATEGORY_NAME'];
+                            c.description =  row['CATEGORY_DESCRIPTION'];
                             c.forums = [];
                             categories.set(categoryId, c);
                         }
 
                         let category = categories.get(categoryId);
-                        let f = new Forum(row['FORUM_TITLE'], row['FORUM_DESCRIPTION'], new Date(row['DATE_CREATED']), row['FORUM_ID']);
+                        let f = new Forum();
+
+                        f.title = row['FORUM_TITLE'];
+                        f.description = row['FORUM_DESCRIPTION'];
+                        f.setCreatedDate(row['DATE_CREATED']);
+                        f.forumId = row['FORUM_ID'];
+
                         if (f.forumId && topicMap.has(f.forumId)) {
 
                             f.totalTopics = topicMap.get(f.forumId);
@@ -71,7 +80,12 @@ export default class ForumService {
                 try {
                     let forumRow = await this.forumDao.getForum(id);
                     // get the forum 
-                    let forum = new Forum(forumRow[0]['TITLE'], forumRow[0]['DESCRIPTION'], new Date(forumRow[0]['DATE_CREATED']), id);
+                    let forum = new Forum();
+                    forum.title = forumRow[0]['TITLE'];
+                    forum.description = forumRow[0]['DESCRIPTION'];
+                    forum.setCreatedDate(forumRow[0]['DATE_CREATED']);
+                    forum.forumId = id;
+                    
                     let subformResult = await this.forumDao.getSubForumsInForum(id);
                     let subforumPostCountResult = await this.forumDao.getPostCountInSubforumsInForum(id);
                     let subforumTopicCountResult = await this.forumDao.getTopicCountInSubforumsInForum(id);
@@ -87,7 +101,12 @@ export default class ForumService {
                     forum.subforums = []; // initialize space for subforums
 
                     for (let i = 0; i < subformResult.length; i++) {
-                        let subforum = new Forum(subformResult[i]['TITLE'], subformResult[i]['DESCRIPTION'], new Date(subformResult[i]['DATE_CREATED']), subformResult[i]['FORUM_ID']);
+                        let subforum = new Forum();
+                        subforum.title = subformResult[i]['TITLE'];
+                        subforum.description = subformResult[i]['DESCRIPTION'];
+                        subforum.setCreatedDate(forumRow[0]['DATE_CREATED']);
+                        subforum.forumId = subformResult[i]['FORUM_ID'];
+
                         if (subforum.forumId && subforumTopicCountMap.has(subforum.forumId)) {
                             subforum.totalTopics = subforumTopicCountMap.get(subforum.forumId);
                             if (subforumPostCountMap.has(subforum.forumId) && subforum.totalTopics != 0)
@@ -104,8 +123,21 @@ export default class ForumService {
                     let topicsResult = await this.topicDao.getTopicsInForum(id);
                     forum.topics = [];
                     for (let i = 0; i < topicsResult.length; i++) {
-                        let user = new User(topicsResult[i]['USERNAME'],topicsResult[i]['EMAIL'], topicsResult[i]['PROFESSION'], topicsResult[i]['NAME'], topicsResult[i]['GENDER'],new Date(topicsResult[i]['BIRTHDAY']), topicsResult[i]['USER_ID']);
-                        let topic = new Topic(topicsResult[i]['TOPIC_ID'], topicsResult[i]['TITLE'], topicsResult[i]['DESCRIPTION'], user, topicsResult[i]['CREATED_DATE']);
+                        let user = new User();
+                        user.username = topicsResult[i]['USERNAME'];
+                        user.email = topicsResult[i]['EMAIL'];
+                        user.profession = topicsResult[i]['PROFESSION'];
+                        user.name = topicsResult[i]['NAME'];
+                        user.gender = topicsResult[i]['GENDER'];
+                        user.setBirthday(topicsResult[i]['BIRTHDAY']);
+                        user.userId = topicsResult[i]['USER_ID'];
+                        
+                        let topic = new Topic();
+                        topic.topicId = topicsResult[i]['TOPIC_ID'];
+                        topic.title =  topicsResult[i]['TITLE'];
+                        topic.description = topicsResult[i]['DESCRIPTION'];
+                        topic.createdBy = user;
+                        topic.setCreatedDate(topicsResult[i]['CREATED_DATE']);
                         if (topic.topicId && postCountMap.has(topic.topicId)) {
                             topic.totalPosts = postCountMap.get(topic.topicId);
                         }

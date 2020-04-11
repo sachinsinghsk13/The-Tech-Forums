@@ -1,5 +1,5 @@
 export default class Avtar {
-    constructor(public id: number, public filename: string) {
-
-    }
+    public id: number | undefined;
+    public filename: string | undefined
+    constructor() {}
 }

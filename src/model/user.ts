@@ -6,22 +6,26 @@ export default class User {
     public topics: number | undefined;
     public prettyDate: string | undefined;
     public html5date: string | undefined;
-    constructor(
-        public username: string,
-        public email: string,
-        public profession: string,
-        public name: string,
-        public gender: string,
-        public birthday?: Date,
-        public userId?: number,
-        public city?: string,
-        public state?: string,
-        public bio?: string,
-        public avtar?: Avtar,
-        public password?: string,
-    ){
+    public username: string | undefined;
+    public email: string | undefined;
+    public profession: string | undefined;
+    public name: string | undefined;
+    public gender: string | undefined;
+    public birthday: Date | undefined;
+    public userId: number | undefined;
+    public city: string | undefined;
+    public state: string | undefined;
+    public bio: string | undefined;
+    public avtar: Avtar | undefined;
+    public password: string | undefined;
+    
+    constructor(){
         this.posts = 0;
         this.topics = 0;
+        
+    }
+    setBirthday(date: Date) {
+        this.birthday = date;
         if (this.birthday) {
             this.prettyDate = formatDateTime(this.birthday);
             this.html5date =  this.birthday.getFullYear().toString() + '-' + (this.birthday.getMonth() + 1).toString().padStart(2, '0') + 

@@ -1,5 +1,7 @@
 import { Pool } from "mysql";
 import { resolve } from "dns";
+import Topic from "../model/topic";
+import Forum from "../model/forum";
 
 export default class TopicDao {
     private connectionPool: Pool;
@@ -53,6 +55,24 @@ export default class TopicDao {
                 })
             })
         });
+    }
+    
+    postTopic(topic: Topic) : Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.connectionPool.getConnection((err, conn) => {
+                if (err)
+                    reject(err);
+                else {
+                    conn.query(this.sql['post_topic'],[topic.forum?.forumId, topic.title, topic.description, topic.createdBy?.userId],(err, result) => {
+                        conn.release();
+                        if (err)
+                            reject(err);
+                        else
+                            resolve(result.insertId);
+                    });
+                }
+            });
+        })
     }
 
     getTopic(id: number) : Promise<any> {

@@ -20,18 +20,25 @@ export default class UserDao {
                     conn.release();
                     if (err)
                         reject(err)
-                    if (result.length) {
-                        let user = result[0];
-                        resolve(
-                            new User(
-                                user.user_id,
-                                user.username,
-                                user.email,
-                                user.profession,
-                                user.name,
-                                user.birthdate,
-                                user.gender
-                            ));
+                    else if (result.length) {
+                        let u = result[0];
+                            let avtar = new Avtar();
+                            avtar.id = u.avtar_id;
+                            avtar.filename = u.image_url;
+
+                            let user = new User();
+                            user.username = u.username;
+                            user.email = u.email;
+                            user.profession = u.profession;
+                            user.name = u.name;
+                            user.gender = u.gender;
+                            user.setBirthday(u.birthday);
+                            user.userId = u.user_id;
+                            user.city = u.city;
+                            user.state = u.state;
+                            user.bio = u.bio;
+                            user.avtar = avtar;
+                            resolve(user);
                     }
                     else
                         reject(new Error('User Not Found!'));
@@ -68,7 +75,9 @@ export default class UserDao {
                         else {
                             let avtars: Avtar[] = [];
                             for (let i = 0; i < result.length; i++) {
-                                let a = new Avtar(result[i]['AVTAR_ID'],result[i]['IMAGE_URL']);
+                                let a = new Avtar();
+                                a.filename = result[i]['IMAGE_URL'];
+                                a.id = result[i]['AVTAR_ID'];
                                 avtars.push(a);
                             }
                             resolve(avtars);
@@ -89,8 +98,21 @@ export default class UserDao {
                             reject(err);
                         else {
                             let u = result[0];
-                            let avtar = new Avtar(u.avtar_id, u.image_url);
-                            let user = new User(u.username, u.email,u.profession,u.name,u.gender,u.birthday,u.user_id,u.city,u.state,u.bio,avtar);
+                            let avtar = new Avtar();
+                            avtar.id = u.avtar_id;
+                            avtar.filename = u.image_url;
+                            let user = new User();
+                            user.username = u.username;
+                            user.email = u.email;
+                            user.profession = u.profession;
+                            user.name = u.name;
+                            user.gender = u.gender;
+                            user.setBirthday(u.birthday);
+                            user.userId = u.user_id;
+                            user.city = u.city;
+                            user.state = u.state;
+                            user.bio = u.bio;
+                            user.avtar = avtar;
                             resolve(user);
                         }
                     });
