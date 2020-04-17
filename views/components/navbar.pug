@@ -1,7 +1,7 @@
-nav.navbar.navbar-expand-lg.navbar-light.bg-light
+nav.navbar.navbar-expand-lg.navbar-light
     a.navbar-brand(href="/")
-        i.fas.fa-comment-dots.fa-2x.text-danger
-        span.h4.text-dark.mx-2 The Tech Forums
+        i.fas.fa-comment-dots.text-danger
+        span.h5.text-dark.mx-2 The Tech Forums
     button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarContent")
         span.navbar-toggler-icon
     .collapse.navbar-collapse#navbarContent
@@ -9,7 +9,7 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
             li.nav-item.active
                 a.nav-link(href="/")
                     i.fas.fa-home 
-                    |  
+                    |  Home
             li.nav-item
                 a.nav-link(href="#")
                     i.fas.fa-list 
@@ -25,7 +25,7 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
                         input.form-control(type="search", placeholder="Search", name="search")
                 li.nav-item.mx-2
                     .dropdown.h-100
-                        button.btn.btn-light.h-100.dropdown-toggle#usermenu(type="button", data-toggle="dropdown", area-haspopup="true", aria-expanded="false")= session.userSession.user.name
+                        button.btn.h-100.dropdown-toggle#usermenu(type="button", data-toggle="dropdown", area-haspopup="true", aria-expanded="false")= session.userSession.user.name
                         .dropdown-menu.dropdown-menu-right(aria-labelledby="usermenu")
                             a.dropdown-item(href=`/profiles/${session.userSession.user.username}`) My Profile
                             .dropdown-divider

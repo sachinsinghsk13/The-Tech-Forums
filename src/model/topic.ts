@@ -1,7 +1,7 @@
 import Forum from "./forum";
 import Post from "./post";
 import User from "./user";
-import { formatDate } from '../util/dateFormat'
+import { formatDate, getTime } from '../util/dateFormat'
 const month = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -24,13 +24,7 @@ export default class Topic {
     setCreatedDate(date: Date) {
         this.createdDate = date;
         if (this.createdDate) {
-            this.prettyDate = this.createdDate?.toLocaleString('en-IN', {
-                hour: 'numeric',
-                minute: 'numeric',
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric'
-            });
+            this.prettyDate = getTime(this.createdDate);
         }
     }
 }

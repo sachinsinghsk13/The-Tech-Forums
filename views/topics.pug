@@ -3,87 +3,66 @@ html
     include includes/head
     body
         include components/navbar
-        .container.shadow-sm
-            .row.my-4
-                .col-12.border-top.py-3.rows-head
+        .container
+            .row.my-1
+                .col-12.py-3
                     .row
-                        .col-1
-                            i.fas.fa-star
-                        .col-11
-                            p.d-block.px-2.h5
-                                strong.text-dark= forum.title
-                        .col-3.offset-1.col-md-8
-                            p.text-success.px-2.h6 Forum
-                        .col-8.col-md-3
-                            p.text-secondary.px-2 Created: #{forum.prettyDate}
-                        .col-11.offset-1.col-md-7
-                            p.text-muted.d-block.px-2= forum.description
-                        .col-11.offset-1.col-md-3.offset-md-1
-                            a.btn.btn-primary.btn-sm.px-3(href="") New Topic
+                        .col-12
+                            p.h4.text-dark= forum.title
+                        .col-3.col-md-4
+                            p.text-success.h6 Forum | #[span.text-info #{forum.topics.length} Topics] | #[span.text-info #{forum.subforums.length} Subforums]
+                        .col-8.col-md-8.text-right
+                            p.text-secondary= forum.prettyDate
+                        .col-12.col-md-7
+                            p.text-muted= forum.description
                 .col-12
                     if (forum.subforums.length > 0)
-                        .row.text-dark.h6.py-2.border
-                            .col-1
-                                i.fas.fa-folder
-                            .col-5 Sub Forums
-                            .col-3.text-center
-                                i.fas.fa-envelope-open-text
-                                | Topics
-                            .col-3.text-center
-                                i.fas.fa-comment
-                                | Posts
+                        .row.text-dark.h6.py-2.border-bottom
+                            .col-7 Sub Forums
+                            .col-3.text-center Topics
+                            .col-2.text-center Posts
                         for subforum in forum.subforums
-                            .row.shadow-sm.my-3.py-3.forum-row
-                                .col-1
-                                    i.fas.fa-folder.text-info.fa-2x
-                                .col-5
-                                    .row
-                                        .col-12
-                                            a.h6.text-decoration-none(href=`/forums/${subforum.title}?forumId=${subforum.forumId}`)
-                                                strong= subforum.title
-                                        .col-12.pt-2
-                                            p.text-muted= subforum.description
-                                .col-3.h6.text-center
-                                    strong= subforum.totalTopics
-                                .col-3.h6.text-center
-                                    strong= subforum.totalPosts
-                    if (forum.topics.length > 0)
-                        .row.text-dark.h6.py-2.border
-                            .col-1
-                                i.fas.fa-envelope-open-text
-                            .col-7 Topics
-                            .col-4.text-center
-                                i.fas.fa-comment
-                                | Replies
-                        for topic in forum.topics
-                            .row.shadow-sm.my-3.py-3.bg-light.topic-row
-                                .col-1
-                                    i.fas.fa-envelope-open-text.text-success.fa-2x
+                            .row.my-3.py-3
                                 .col-7
-                                    .row
-                                        .col-12
-                                            a.h6.text-decoration-none(href=`/topics/${encodeURIComponent(topic.title.replace(/\s/g,'-'))}?topicId=${topic.topicId}`)
-                                                strong= topic.title
-                                        .col-12.d-none.d-md-block
-                                            p.text-muted= topic.description
-                                        .col-12.col-md-6
-                                            p.text-muted By: #[a.text-decoration-none.btn-link(href=`/profiles/${topic.createdBy.username}`) @#{topic.createdBy.username}]
-                                        .col-12.col-md-4.offset-md-2
-                                            p.text-muted= topic.prettyDate
-                                .col-4.h6.text-center= topic.totalPosts
-                    if (session.userSession && session.userSession.authenticated)
-                        .row.shadow-sm.my-3.py-3#topic-create-area.border-top
-                            .col-11.offset-1
-                                h4.my-2 New Discussion Topic
-                                form(action="/topics", method="post")
-                                    .form-group
-                                        label Title:
-                                        input.form-control(type="text", placeholder="Title", name="title")
-                                    .form-group
-                                        label Description:
-                                        textarea.form-control(name="description", cols="30", rows="4", placeholder="Write Something")
-                                    .form-group
-                                        input(type="hidden" , value=`${forum.forumId}`, name="forumId")
-                                    .form-group
-                                        input.btn.btn-primary(type="submit", value="Post Topic")
-        include components/footer
+                                    a(href=`/forums/${encodeURIComponent(subforum.title.replace(/\s/g,'-'))}?forumId=${subforum.forumId}`).h6.text-decoration-none.font-weight-bold= subforum.title         
+                                .col-3.text-center= subforum.totalTopics
+                                .col-2.text-center= subforum.totalPosts
+                                .col-12
+                                    if subforum.description.length > 50
+                                        p.text-muted.small= subforum.description.substr(0,50) + '...'
+                                    else
+                                        p.text-muted.small= subforum.description
+                    .row.my-3.py-3
+                        .col-12
+                            h6 Ask a Question
+                            form(action="/topics", method="POST")
+                                .form-row
+                                    .col-12
+                                        input(type="hidden", value=`${forum.forumId}`, name="forumId")
+                                .form-row
+                                    .col-12
+                                        .form-group
+                                            input.form-control(type="text", placeholder="Your Question", name="title")
+                                .form-row
+                                    .col-12
+                                        .form-group
+                                            textarea.form-control(placeholder="Explain in details (optional)", rows="2", cols="30", name="description")
+                                .form-row
+                                    .col-12
+                                        if (session.userSession && session.userSession.authenticated)
+                                            input.btn.btn-primary.border(type="submit", value="Post Question")
+                                        else
+                                            input.btn.btn-primary.border.disabled(type="button", value="Login to Post Question", disabled)
+                    if (forum.topics.length > 0)
+                        .row.text-dark.h6.py-2.border-bottom
+                            .col-12.h6 Topics
+                        for topic in forum.topics
+                            .row.py-1.border-bottom
+                                .col-12
+                                    a.font-weight-bold.text-decoration-none(href=`/topics/${encodeURIComponent(topic.title.replace(/\s/g,'-'))}?topicId=${topic.topicId}`)= topic.title
+                                .col-12.text-muted.small.py-1 Asked by #[a.font-italic.text-decoration-none(href=`/profiles/${topic.createdBy.username}`)= topic.createdBy.username] | #{topic.prettyDate} | #{topic.totalPosts} Answers
+                                .col-12
+                                    if topic.description.length > 50
+                                        p.text-muted.my-1(style="white-space: pre-line;")= topic.description.substr(0,50) + '...'
+                                    else
+                                        p.text-muted.my-1(style="white-space: pre-line;")= topic.description

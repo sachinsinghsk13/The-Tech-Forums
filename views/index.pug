@@ -4,40 +4,33 @@ html
     body
         include components/navbar
 
-        .container.shadow-sm
+        .container
             for category in categories
-                .row.my-4
-                    .col-12.border-top.py-3.rows-head
+                .row
+                    .col-12.p-3
                         .row
-                            .col-1
-                                i.fas.fa-star
-                            .col-10
-                                p.text-dark.px-2.h5= category.name
+                            .col-12
+                                p.text-dark.h4= category.name
                         .row
-                            .col-10.offset-1
-                                p.text-success.px-2.h6 [FORUM CATEGORY]
-                            .col-10.offset-1
-                                p.text-muted.d-block.px-2= category.description
-                    .col-12
-                        .row.bg-light.text-dark.h6.py-2.border
-                            .col-6.offset-1 Forum
-                            .col-2 Topics
-                            .col-3 Posts
+                            .col-12
+                                p.text-success.h6 Forum Category
+                        .row
+                            .col-12
+                                p.text-muted.d-block= category.description
+                    .col-12.p-3
+                        .row.text-dark.h6.py-2.border-bottom
+                            .col-7 Forum
+                            .col-3.text-center Topics
+                            .col-2.text-center Posts
                         for forum in category.forums
-                            .row.shadow-sm.my-3.py-3.forum-row
-                                .col-1
-                                    i.fas.fa-folder.fa-2x.text-info
-                                .col-6
-                                    .row
-                                        .col-12
-                                            a(href=`/forums/${encodeURIComponent(forum.title.replace(/\s/g,'-'))}?forumId=${forum.forumId}`).h6.text-decoration-none
-                                                strong= forum.title
-                                        .col-12.pt-2
-                                            if forum.description.length > 50
-                                                p.text-muted= forum.description.substr(0,50) + '...'
-                                            else
-                                                p.text-muted= forum.description
-                                .col-2.h5=  forum.totalTopics
-                                .col-2.h5=  forum.totalPosts
-       
+                            .row.my-3.py-3.border-bottom
+                                .col-7
+                                    a(href=`/forums/${encodeURIComponent(forum.title.replace(/\s/g,'-'))}?forumId=${forum.forumId}`).font-weight-bold.text-decoration-none= forum.title         
+                                .col-3.text-center=  forum.totalTopics
+                                .col-2.text-center=  forum.totalPosts
+                                .col-12
+                                    if forum.description.length > 50
+                                        p.text-muted.small= forum.description.substr(0,50) + '...'
+                                    else
+                                        p.text-muted.small= forum.description
         include components/footer

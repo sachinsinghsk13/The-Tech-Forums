@@ -7,6 +7,8 @@ import Forum from '../model/forum';
 import User from '../model/user';
 import Post from '../model/post';
 import PostDao from '../dao/post_dao';
+import ForumDao from '../dao/forum_dao';
+import ForumService from '../services/forums_service';
 // Mounted to /forums/{forum_title}/topics
 const TopicController = express.Router();
 
@@ -27,6 +29,7 @@ TopicController.post('/topics', (req, res) => {
     if (req.session) {
         let userId = req.session.userSession.user.userId;
         let topicsDao = <TopicDao> req.app.get(AppConstants.TOPIC_DAO);
+        let forumService = <ForumService> req.app.get(AppConstants.FORUM_SERVICE);
         let forum = new Forum();
         forum.forumId = forumId;
         let user = new User();
@@ -39,7 +42,9 @@ TopicController.post('/topics', (req, res) => {
         (async () => {
            try {
             let topicId = await topicsDao.postTopic(topic);
-            res.redirect(`/topics/${encodeURIComponent(title)}?topicId=${topicId}`);
+            let forum = await forumService.getForum(forumId);
+            let title = forum.title || 'no title';
+            res.redirect(`/forums/${encodeURIComponent(title)}?forumId=${forumId}`);
            } catch (error) {
             console.log(error);
            }

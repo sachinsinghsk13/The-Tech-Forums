@@ -1,5 +1,6 @@
 import User from "./user";
 import Topic from "./topic";
+import { getTime } from "../util/dateFormat";
 
 export default class Post {
     public prettyDate: string | undefined;
@@ -16,13 +17,7 @@ export default class Post {
     setPostedDate(date: Date) {
         this.datePosted = date;
         if (this.datePosted) {
-            this.prettyDate = this.datePosted?.toLocaleString('en-IN' , {
-                hour: 'numeric',
-                minute: 'numeric',
-                day:'numeric',
-                month:'short',
-                year:'numeric'
-            });
+            this.prettyDate = getTime(this.datePosted);
         }
     }
 }
